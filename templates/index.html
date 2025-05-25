@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Wallet</title>
+    <style>
+        body { font-family: Arial; background: #eef; padding: 20px; }
+        h1 { color: #3366cc; }
+        .inntekt { color: green; }
+        .utgift { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Daily Wallet</h1>
+    <p><strong>Saldo:</strong> {{ saldo }} NOK</p>
+
+    <form action="/legg_til" method="post">
+        <input type="number" name="beløp" step="0.01" placeholder="Beløp" required>
+        <input type="text" name="tekst" placeholder="Hva tjente du på?">
+        <select name="kategori">
+            {% for k in kategorier %}
+                <option>{{ k }}</option>
+            {% endfor %}
+        </select>
+        <select name="type">
+            <option>Inntekt</option>
+            <option>Utgift</option>
+        </select>
+        <button type="submit">Legg til</button>
+    </form>
+
+    <form action="/nullstill">
+        <button type="submit" style="margin-top: 10px;">Nullstill alt</button>
+    </form>
+
+    <h2>Transaksjoner</h2>
+    <ul>
+        {% for x in data %}
+            <li class="{{ 'inntekt' if x.beløp > 0 else 'utgift' }}">
+                {{ x.kategori }}: {{ x.tekst }} ({{ x.beløp }})
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
